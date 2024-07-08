@@ -9,8 +9,11 @@ import Login from './pages/Login';
 import Signup from './pages/Signup';
 import Chat from './pages/Chat';
 import InvalidPage from './pages/InvalidPage';
+import { useRecoilValue } from 'recoil';
+import userAtom from './atoms/userAtom';
 
 function App() {
+  const currentUser = useRecoilValue(userAtom);
   return (
     <>
       <Header />

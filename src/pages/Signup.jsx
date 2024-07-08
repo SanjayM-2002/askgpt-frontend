@@ -8,6 +8,8 @@ import { useNavigate } from 'react-router-dom';
 import userAtom from '../atoms/userAtom';
 import { useSetRecoilState } from 'recoil';
 import Loader from '../common/Loader';
+import toast from 'react-hot-toast';
+import axios from 'axios';
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -28,32 +30,68 @@ const Signup = () => {
       [name]: value,
     }));
   };
+  // const submitForm = async () => {
+  //   console.log('formdata is: ', formData);
+  //   try {
+  //     setIsLoading(true);
+  //     const res = await fetch(`${BACKEND_BASE_URL}/api/v1/users/signup`, {
+  //       method: 'POST',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //       body: JSON.stringify(formData),
+  //     });
+  //     const data = await res.json();
+  //     console.log('response from backend is: ', data);
+  //     if (data.error) {
+  //       console.log('Error in request is: ', data.error);
+  //       toast.error('Error in Signup', { id: 'Signup' });
+  //       return;
+  //     }
+  //     localStorage.setItem('currentUser', JSON.stringify(data.userDetails));
+  //     setCurrentUser(data.userDetails);
+  //     toast.success('Signup success', { id: 'Signup' });
+  //     navigate('/');
+  //   } catch (error) {
+  //     console.log('Error is: ', error);
+  //     toast.error('Error in Signup', { id: 'Signup' });
+  //   } finally {
+  //     setIsLoading(false);
+  //   }
+  // };
+
   const submitForm = async () => {
     console.log('formdata is: ', formData);
     try {
       setIsLoading(true);
-      // const res = await fetch(`${BACKEND_BASE_URL}/api/v1/users/signup`, {
-      //   method: 'POST',
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //   },
-      //   body: JSON.stringify(formData),
-      // });
-      // const data = await res.json();
-      // console.log('response from backend is: ', data);
-      // if (data.error) {
-      //   console.log('Error in request is: ', data.error);
-      //   return;
-      // }
-      // localStorage.setItem('currentUser', JSON.stringify(data.userDetails));
-      // setCurrentUser(data.userDetails);
+      const response = await axios.post(
+        `${BACKEND_BASE_URL}/api/v1/users/signup`,
+        formData,
+        {
+          withCredentials: true,
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+      const data = response.data;
+      console.log('response from backend is: ', data);
+      if (data.error) {
+        console.log('Error in request is: ', data.error);
+        toast.error('Error in Signup', { id: 'Signup' });
+        return;
+      }
+      localStorage.setItem('currentUser', JSON.stringify(data.userDetails));
+      setCurrentUser(data.userDetails);
+      toast.success('Signup success', { id: 'Signup' });
+      navigate('/');
     } catch (error) {
       console.log('Error is: ', error);
+      toast.error('Error in Signup', { id: 'Signup' });
     } finally {
       setIsLoading(false);
     }
   };
-
   if (isLoading) {
     return (
       <>
