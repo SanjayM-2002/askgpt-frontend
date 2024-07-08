@@ -1,30 +1,41 @@
-import axios from 'axios';
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const Home = () => {
-  const helloApi = async () => {
-    const BACKEND_BASE_URL = import.meta.env.VITE_BACKEND_URL;
-    try {
-      const response = await axios.get(
-        `${BACKEND_BASE_URL}/api/v1/chat/hello`,
-        {
-          withCredentials: true,
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        }
-      );
-      console.log('response from backend is: ', response.data);
-    } catch (error) {
-      console.log('error is: ', error);
-    }
+  const navigate = useNavigate();
+  const navigateToChat = () => {
+    navigate('/chat');
   };
+
   return (
     <>
-      <div>Home</div>
-      <button className='bg-red-200 p-4' onClick={helloApi}>
-        Hello
-      </button>
+      <div className='bg-gray-100 min-h-screen flex flex-col justify-center items-center'>
+        <div className='max-w-md p-8 bg-white shadow-lg rounded-lg'>
+          <h1 className='font-extrabold text-blue-800 mb-4 text-4xl'>
+            ASK GPT
+          </h1>
+          <div className='mb-4'>
+            <p className='text-gray-600 mb-2 text-3xl'>
+              <span className='font-bold'>Welcome to ASK GPT,</span> your
+              virtual assistant powered by the Llama 3 model from Groq API.
+            </p>
+            <p className='text-blue-600 mb-2 text-lg'>
+              Feel free to ask any questions related to technology, sports,
+              finance, or anything else you're curious about.
+            </p>
+            <p className='text-red-600 mb-2 text-lg font-semibold'>
+              Please refrain from sharing sensitive information and avoid
+              posting offensive or inappropriate messages.
+            </p>
+          </div>
+          <button
+            onClick={navigateToChat}
+            className='bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition duration-300'
+          >
+            Start Chat
+          </button>
+        </div>
+      </div>
     </>
   );
 };
